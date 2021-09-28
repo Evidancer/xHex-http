@@ -1,0 +1,62 @@
+@import url("reset.css");
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    background-color: #333341;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(94, 236, 255);
+}
+
+
+h1{
+    text-align: center;
+    font-size: 50px;
+    margin: 0 0px 25px 0px;
+    background-color: rgb(46, 46, 46);
+    border-bottom: 3px solid rgb(94, 236, 255);
+    border-radius: 0 0 30px 30px;
+    padding: 30px 0;
+    animation: gtext 4s ease-in-out infinite;
+}
+
+#canvas {
+    display: block;
+    background: url("/public/img/grid.png");
+    width: 800px;
+    height: 800px;
+    margin: auto;
+    outline: 1px dashed rgb(94, 236, 255);
+    animation: gout 4s ease-in-out infinite;
+}
+
+@keyframes gtext {
+    0%{
+        color: rgb(94, 236, 255);
+        border-bottom-color: rgb(94, 236, 255);
+    }
+    50%{
+        color: rgb(255, 61, 61);
+        border-bottom-color: rgb(255, 61, 61);;
+    }
+    100%{
+        color: rgb(94, 236, 255);
+        border-bottom-color: rgb(43, 195, 255);
+    }
+}
+
+@keyframes gout {
+    0%{
+        outline-color: rgb(94, 236, 255);
+    }
+    50%{
+        outline-color: rgb(255, 61, 61);;
+    }
+    100%{
+        outline-color: rgb(94, 236, 255);
+    }
+}
