@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // WEBSOCKET WITH SERVER
 
-    let socket = new WebSocket("ws://localhost:81");
+    let socket = new WebSocket('ws://xhex-ws.herokuapp.com');
     socket.onopen = ()=>{
         console.log("GOT IT!");
         //console.log("Sending...");
