@@ -7,12 +7,181 @@
     <title>xHex</title>
     <link rel="stylesheet" href="/public/css/main.css">
     <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script defer src="/socket.io/socket.io.js"></script>
     <script defer src="/public/js/main.js"></script>
 </head>
 <body>
-    <h1 class="g-h">xHex</h1>
-    <div class="canvas-wrap">
-        <canvas width="800" height="800" id="canvas"></canvas>
+
+    <header class="header">
+        <h1 class="header_title">xHex</h1>
+    </header>
+    <div class="content">
+        <aside class="content_aside content_aside-left">
+            <div class="aside_score"></div>
+            <div class="aside_chat">
+                <div class="aside-title">ЧАТ</div>
+                <div class="aside_chat-scroll">
+                    <!-- <div class="aside_chat-msg">
+                        <div class="aside_chat-author">Ega</div>
+                        <div class="aside_chat-text">Сообщение сообщение и что-то такое</div>
+                    </div> -->
+                </div>
+                <form name="chat-msg">
+                    <div class="modal-error error-chat-msg"></div>
+                    <textarea name="msg" placeholder="Ваше сообщение..." class="aside-textarea"></textarea>
+                    <button type="button" onclick="chatMsgRequest()" class="aside-btn">Отправить</button>
+                </form>
+            </div>
+        </aside>
+        <canvas class="canvas" id="canvas" width="800" height="800"></canvas>
+        <aside class="content_aside content_aside-right">
+            <div class="aside_cooldown"> <!-- active, bottom -->
+                <div class="ability">
+                    <div class="cooldown-wrap">
+                        <img src="" alt="" class="ability-icon">
+                    </div>
+                    <div class="ability-name"></div>
+                </div>
+            </div>
+        </aside>
     </div>
+
+
+
+
+
+
+    <div class="modal modal-sign-in">
+        <div class="modal-title">ВХОД</div>
+        <form class="modal-form form-sign-in" name="sign-in" onsubmit="return false">
+            <input required class="modal-input" type="text" name="nickname" placeholder="Имя">
+            <input required class="modal-input" type="password" name="password" placeholder="Пароль">
+            <div class="modal-error error-sign-in"></div>
+            <button onclick="signInRequest()" type="button" class="modal-btn">Войти</button>
+        </form>
+        <button class="modal-btn" onclick="modal('sign-in').goTo('sign-up')">Регистрация</button>
+        <button class="modal-btn" onclick="signGuestRequest()">Войти как гость</button> <!-- onclick временный !!!! УДАЛИТЬ -->
+    </div>
+
+    <div class="modal modal-sign-up">
+        <div class="modal-title">РЕГИСТРАЦИЯ</div>
+        <form class="modal-form form-sign-up" name="sign-up" onsubmit="return false">
+            <input required class="modal-input" type="text" name="nickname" placeholder="Имя">
+            <input required class="modal-input" type="password" name="password" placeholder="Пароль">
+            <input required class="modal-input" type="password" name="cpassword" placeholder="Подтверждение пароля">
+            <div class="modal-error error-sign-up"></div>
+            <button onclick="signUpRequest()" type="button" class="modal-btn">Зарегистрироваться</button>
+        </form>
+        <button class="modal-btn" onclick="modal('sign-up').goTo('sign-in')">Вход</button>
+        <button class="modal-btn" onclick="signGuestRequest()">Войти как гость</button>
+    </div>
+
+    <div class="modal modal-main">
+        <div class="modal-title">МЕНЮ</div>
+        <button class="modal-main_btn" onclick="goToRoomList()">Присоединиться</button>
+        <button class="modal-main_btn" onclick="modal('main').goTo('create')">Создать</button>
+        <button class="modal-main_btn" onclick="modal('main').goTo('profile')">Профиль</button>
+        <button class="modal-main_btn" onclick="modal('main').goTo('how')">Как играть</button>
+    </div>
+
+    <div class="modal modal-join">
+        <div class="modal-title">АКТИВНЫЕ КОМНАТЫ</div>
+        <div class="modal-scroll">
+            <table class="servers-list">
+                <thead>
+                    <tr>
+                        <th>Название комнаты</th>
+                        <th>Игроки</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody name="r-table">
+                    <!-- <tr name="r-id">
+                        <td name="r-name">Gloria</td>
+                        <td name="r-players">1/2</td>
+                        <td name="r-status">Ожидание</td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+        <input readonly class="modal-input" name="roomname" type="text" placeholder="Поиск по названию">
+        <div class="modal-error error-join"></div>
+        <form name="join">
+            <input name="room-id" hidden type="text">
+            <button onclick="joinRoomRequest()" type="button" class="modal-main_btn">Присоединиться</button>
+        </form>
+        <button class="modal-main_btn" onclick="modal('join').goTo('main')">Назад</button>
+    </div>
+    
+    <div class="modal modal-password">
+        <div class="modal-title">ВВЕДИТЕ ПАРОЛЬ</div>
+        <form name="password" class="modal-form">
+            <input name="room-id" hidden type="text">
+            <input class="modal-input" name="password" type="text" placeholder="Пароль от комнаты">
+            <div class="modal-error error-password"></div>
+            <button onclick="roomPasswordRequest()" class="modal-main_btn" type="button">Подтвердить</button>
+        </form>
+        <button class="modal-main_btn" onclick="modal('password').goTo('join')">Отмена</button>
+    </div>
+
+    <div class="modal modal-create">
+        <div class="modal-title">СОЗДАНИЕ КОМНАТЫ</div>
+        <form class="modal-form" name="create">
+            <input class="modal-input" type="text" name="roomname" placeholder="Название">
+            <input class="modal-input" type="password" name="password" placeholder="Пароль (возможно пустой)">
+            <div class="modal-desc">
+                Configs coming soon.
+            </div>
+            <div class="modal-error error-create"></div>
+            <button onclick="createRoomRequest()" class="modal-main_btn" type="button">Создать</button>
+        </form>
+        <button class="modal-main_btn" onclick="modal('create').goTo('main')">Назад</button>
+    </div>
+
+    <div class="modal modal-room">
+        <div class="modal-title">КОМНАТА</div>
+        <div class="modal-desc">Название: <span name="room-roomname"></span></div>
+        <div class="modal-desc">Список игроков:</div>
+        <ol class="modal-ol" name="room-players">
+        </ol>
+        <div class="modal-error error-room"></div>
+        <button class="modal-main_btn create-btn" onclick="initGameRequest()" >Начать</button>
+        <button class="modal-main_btn" onclick="leaveRoomRequest()">Выйти</button>
+    </div>
+
+    <div class="modal modal-how">
+        <div class="modal-title">КАК ИГРАТЬ</div>
+        <div class="modal-desc">
+            А ВОТ ТАК!
+        </div>
+        <button class="modal-main_btn" onclick="modal('how').goTo('main')">Назад</button>
+    </div>
+
+    <div class="modal modal-profile">
+        <div class="modal-title">ПРОФИЛЬ</div>
+        <div class="modal-nickname">Ник: <span name="user_nickname"></span></div>
+        <div class="modal-desc">
+            Побед: <span name="user_stat_wins"></span><br>
+            Поражений: <span name="user_stat_losses"></span>
+        </div>
+        <div class="modal-error error-profile"></div>
+        <button onclick="signOutRequest()" class="modal-main_btn">Выйти из уч. записи</button>
+        <button class="modal-main_btn" onclick="modal('profile').goTo('main')">Назад</button>
+    </div>
+
+    <div class="modal modal-load">
+        <div class="modal-title">ЗАГРУЗКА</div>
+        <div class="modal-load_wrap">
+            <div class="modal-load_circle">
+                <div class="modal-load_subcircle"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal error-modal">
+        <div class="modal-title">ОШИБКА</div>
+        <div class="modal-error"></div>
+    </div>
+
 </body>
 </html>

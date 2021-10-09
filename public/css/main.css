@@ -4,7 +4,18 @@
     box-sizing: border-box;
 }
 
+*:focus {
+    outline: none;
+}
+
+html{
+    width: 100%;
+    height: 100%;
+}
+
 body {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     background-color: #333341;
@@ -12,51 +23,414 @@ body {
     color: rgb(94, 236, 255);
 }
 
-
-h1{
-    text-align: center;
-    font-size: 50px;
-    margin: 0 0px 25px 0px;
-    background-color: rgb(46, 46, 46);
+.header{
+    padding: 30px 0;
+    margin: 0 0px 5px 0px;
+    background-color: rgb(46, 48, 53);
     border-bottom: 3px solid rgb(94, 236, 255);
     border-radius: 0 0 30px 30px;
-    padding: 30px 0;
-    animation: gtext 4s ease-in-out infinite;
 }
 
-#canvas {
+.header_title{
+    text-align: center;
+    font-size: 40px;
+    /* animation: gtext 4s ease-in-out infinite; */
+}
+
+.content{
+    flex-grow: 1;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.content_aside{
+    width: 300px;
+    height: 800px;
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content_aside-left>div{
+    background-color: rgb(46, 48, 53);
+    border: 2px solid rgb(94, 236, 255);
+    width: 100%;
+    border-radius: 20px 0 0 20px;
+}
+
+.content_aside-left>div:first-child{
+    margin-bottom: 10px;
+}
+
+.content_aside-right>div{
+    width: 100%;
+    background-color: rgb(46, 48, 53);
+    border: 2px solid rgb(94, 236, 255);
+    border-radius: 0 20px 20px 0;
+    min-height: 300px;
+}
+
+.aside_score, .aside_chat{
+    padding: 20px;
+}
+
+.aside_score{
+    display: none;
+    height: 290px;
+}
+
+.aside_score.active, .aside_chat.active{
+    display: flex;
+}
+
+.aside-title{
+    font-size: 26px;
+    text-align: center;
+}
+
+.aside_chat{
+    display: none;
+    height: calc(100% - 300px);
+    flex-direction: column;
+}
+
+.aside_chat-scroll{
+    flex-grow: 1;
+    overflow-y: auto;
+    white-space: wrap;
+    word-break: break-all;
+    border: 1px solid rgb(94, 236, 255);
+    padding: 10px;
+    margin-bottom: 10px;
+    background: rgb(34, 36, 41);
+    -ms-overflow-style:none;
+    scrollbar-width: 0;
+}
+
+.aside_chat-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.aside-textarea{
+    display: block;
+    width: 100%;
+    height: 80px;
+    padding: 4px;
+    margin-bottom: 5px;
+    background: none;
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border: 1px solid rgb(94, 236, 255);
+    background: rgb(34, 36, 41);
+    color: white;
+    font-size: 16px;
+    resize:none;
+}
+
+
+.aside_chat-msg{
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.aside_chat-author{
+    animation: color 1s ease-in-out;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.aside_chat-text{
+    animation: color 1s ease-in-out;
+    color: rgb(160, 223, 231);
+    margin-top: 0;
+    font-size: 14px;
+}
+
+.aside-textarea:active, .aside-textarea:focus{
+    border: 2px solid rgb(94, 236, 255);
+}
+.aside-btn{
+    color: rgb(94, 236, 255);
+    font-size: 20px;
+    background: none;
+    border: 1px solid rgb(94, 236, 255);
+    background: rgb(34, 36, 41);
+    width: 100%;
+    border-radius: 4px;
+}
+
+.aside-btn:focus, .aside-btn:hover{
+    border: 2px solid rgb(94, 236, 255);
+    outline: none;
+}
+
+.content_aside-right .aside_cooldown {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.content_aside-right .aside_cooldown.bottom{
+    margin-top: auto;
+}
+
+.content_aside-right .aside_cooldown{
+    display: none;
+}
+
+.content_aside-right .aside_cooldown.active{
+    display: flex;
+}
+
+.canvas {
     display: block;
     background: url("/public/img/grid.png");
     width: 800px;
     height: 800px;
-    margin: auto;
-    outline: 1px dashed rgb(94, 236, 255);
-    animation: gout 4s ease-in-out infinite;
+    outline: 2px solid rgb(94, 236, 255);
+    /* animation: gout 4s ease-in-out infinite; */
 }
 
-@keyframes gtext {
+
+
+
+
+
+/*       MODAL        */
+
+.modal.active {
+    display: block;
+}
+
+.modal {
+    display: none;
+    
+    z-index: 1;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 360px;
+
+    border: 2px solid rgb(94, 236, 255);
+    border-radius: 20px;
+    background-color: rgb(46, 48, 53);
+    padding: 20px;
+}
+
+.modal>* {
+    margin-bottom: 5px;
+}
+
+.modal>*:last-child{
+    margin-bottom: 0;
+}
+
+.modal-title{
+    font-size: 26px;
+    text-align: center;
+}
+
+.modal-input{
+    display: block;
+    width: 100%;
+    height: 30px;
+    margin-bottom: 5px;
+    background: none;
+    box-shadow: none;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgb(94, 236, 255);
+    background: rgb(34, 36, 41);
+    color: white;
+    font-size: 16px;
+    animation: none;
+}
+
+.modal-input:focus{
+    border-bottom: 3px solid rgb(94, 236, 255);
+}
+
+.modal-input::placeholder{
+    color: rgb(189, 189, 189);
+}
+
+.modal-btn{
+    color: rgb(94, 236, 255);
+    font-size: 20px;
+    background: none;
+    border: 1px solid rgb(94, 236, 255);
+    background: rgb(34, 36, 41);
+    width: 100%;
+    border-radius: 4px;
+}
+
+
+.modal-btn:focus, .modal-btn:hover{
+    border: 2px solid rgb(94, 236, 255);
+    outline: none;
+}
+
+.modal-error{
+    display: none;
+    color: red;
+    animation: none;
+}
+
+.modal-error.active{
+    display: block;
+}
+
+.modal-row{
+    display: flex;
+}
+
+.modal .modal-form{
+    margin-bottom: 15px;
+}
+
+.modal-main_btn {
+    display: block;
+    padding: 5px;
+    width: 100%;
+    font-size: 22px;
+    border: 1px solid rgb(94, 236, 255);
+    color: rgb(94, 236, 255);
+    background: rgb(34, 36, 41);
+    border-radius: 4px;
+}
+
+.modal-main_btn:hover{
+    border: 2px solid rgb(94, 236, 255);
+}
+
+.modal-scroll {
+    overflow-y: auto;
+    -ms-overflow-style:none;
+    scrollbar-width: 0;
+    max-height: 450px;
+}
+
+.modal-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.modal .create-btn{
+    display: none;
+}
+
+.modal .create-btn.active{
+    display: block;
+}
+
+.modal.modal-load, .modal.modal-error{
+    width: auto;
+}
+
+.modal-load_wrap{
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-load_circle{
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgb(94, 236, 255);
+    border-top: none;
+    border-radius: 50%;
+    animation: loadSpiner 2s linear infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-load_subcircle{
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgb(94, 236, 255);
+    border-top: none;
+    border-radius: 50%;
+    animation: loadSpiner 1.75s linear infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*         TABLE          */
+
+.servers-list {
+	width: 100%;
+	border: none;
+	margin-bottom: 20px;
+}
+.servers-list thead th {
+	font-weight: bold;
+	text-align: left;
+	border: none;
+	padding: 10px 15px;
+	background: #202129;
+	font-size: 14px;
+    color: rgb(94, 236, 255);
+	border-left: 1px solid rgb(94, 236, 255);
+	border-right: 1px solid rgb(94, 236, 255);
+}
+.servers-list tbody td {
+	text-align: left;
+	border-left: 1px solid rgb(94, 236, 255);
+	border-right: 1px solid rgb(94, 236, 255);
+	padding: 10px 15px;
+	font-size: 14px;
+	vertical-align: top;
+}
+.servers-list thead tr th:first-child, .servers-list tbody tr td:first-child {
+	border-left: none;
+}
+.servers-list thead tr th:last-child, .servers-list tbody tr td:last-child {
+	border-right: none;
+}
+.servers-list tbody tr:nth-child(even){
+	background: #202129;
+}
+
+.servers-list tbody tr.active {
+    background: #007272;
+}
+
+
+
+
+
+
+
+
+@keyframes loadSpiner {
     0%{
-        color: rgb(94, 236, 255);
-        border-bottom-color: rgb(94, 236, 255);
+        transform: rotate(0deg);
     }
     50%{
-        color: rgb(255, 61, 61);
-        border-bottom-color: rgb(255, 61, 61);;
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes color {
+    0%{
+        color: rgb(255, 86, 86);
     }
     100%{
         color: rgb(94, 236, 255);
-        border-bottom-color: rgb(43, 195, 255);
-    }
-}
-
-@keyframes gout {
-    0%{
-        outline-color: rgb(94, 236, 255);
-    }
-    50%{
-        outline-color: rgb(255, 61, 61);;
-    }
-    100%{
-        outline-color: rgb(94, 236, 255);
     }
 }

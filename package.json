@@ -17,8 +17,12 @@
   },
   "homepage": "https://github.com/Evidancer/xhex-http#readme",
   "dependencies": {
+    "axios": "^0.22.0",
+    "cookie": "^0.4.1",
     "express": "^4.17.1",
-    "path": "^0.12.7"
+    "mysql2": "^2.3.0",
+    "path": "^0.12.7",
+    "socket.io": "^4.2.0"
   },
   "engines": {
     "node": "16.x"
