@@ -72,6 +72,10 @@ function drawUnit(ctx, unit){
     drawImage(ctx, ctx.imgs["t"+team], ...unit.bpos, unit.tang);
 }
 
+function drawProj(ctx, unit){
+    drawImage(ctx, ctx.imgs["pred"], ...unit.pos, unit.ang);
+}
+
 function drawImage(ctx, img, x, y, rad){
     ctx.translate(x, y);
     ctx.rotate(rad);
@@ -89,11 +93,17 @@ function loadImages(){
     tblue.src = "/public/img/t-blue.png";
     let bblue = new Image();
     bblue.src = "/public/img/b-blue.png";
+    let pred = new Image();
+    bblue.src = "/public/img/p-red.png";
+    let pblue = new Image();
+    bblue.src = "/public/img/p-blue.png";
     return {
         tred,
         bred,
         tblue,
         bblue,
+        pred,
+        pblue
     };
 }
 
@@ -491,6 +501,8 @@ function initGame(d){
 
     ws.onmessage = (res)=>{
 
+        console.log(res);
+
         res = JSON.parse(res.data);
         switch (res.type){
             case "res-await":
@@ -521,8 +533,8 @@ function initGame(d){
     function renderFrame(units){
         ctx.clearRect(0, 0, 800, 800);
         units.veh.forEach(unit=>{
-            drawUnit(ctx, unit);
-        })
+            drawUnit(ctx, unit); 
+        });
 
         userInputs.dir = getDir(userInputs);
         console.log(userInputs);
