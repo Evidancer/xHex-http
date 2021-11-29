@@ -99,7 +99,7 @@ function loadImages(){
     let pred = new Image();
     bblue.src = "/public/img/p-red.png";
     let pblue = new Image();
-    bblue.src = "/public/img/p-blue.png";
+    pblue.src = "/public/img/p-blue.png";
     return {
         tred,
         bred,
