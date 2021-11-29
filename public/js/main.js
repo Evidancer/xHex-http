@@ -72,8 +72,11 @@ function drawUnit(ctx, unit){
     drawImage(ctx, ctx.imgs["t"+team], ...unit.bpos, unit.tang);
 }
 
-function drawProj(ctx, unit){
-    drawImage(ctx, ctx.imgs["pred"], ...unit.pos, unit.ang);
+function drawProj(ctx, units){
+    units.proj.forEach(p=>{
+        drawImage(ctx, ctx.imgs["pred"], ...unit.pos, unit.ang);
+    });
+    
 }
 
 function drawImage(ctx, img, x, y, rad){
@@ -535,6 +538,7 @@ function initGame(d){
         units.veh.forEach(unit=>{
             drawUnit(ctx, unit); 
         });
+        drawProj(ctx, units);
 
         userInputs.dir = getDir(userInputs);
         console.log(userInputs);
