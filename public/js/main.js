@@ -97,7 +97,7 @@ function loadImages(){
     let bblue = new Image();
     bblue.src = "/public/img/b-blue.png";
     let pred = new Image();
-    bblue.src = "/public/img/p-red.png";
+    pred.src = "/public/img/p-red.png";
     let pblue = new Image();
     pblue.src = "/public/img/p-blue.png";
     return {
