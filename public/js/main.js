@@ -73,7 +73,10 @@ function drawUnit(ctx, unit){
 }
 
 function drawProj(ctx, unit){
-    drawImage(ctx, ctx.imgs["pred"], ...unit.pos, unit.ang);
+    unit.proj.forEach(el=>{
+        let team = (!el.team)?"blue":"red";
+        drawImage(ctx, ctx.imgs["p"+team], ...el.pos, el.ang);
+    });
 }
 
 function drawImage(ctx, img, x, y, rad){
@@ -94,9 +97,9 @@ function loadImages(){
     let bblue = new Image();
     bblue.src = "/public/img/b-blue.png";
     let pred = new Image();
-    bblue.src = "/public/img/p-red.png";
+    pred.src = "/public/img/p-red.png";
     let pblue = new Image();
-    bblue.src = "/public/img/p-blue.png";
+    pblue.src = "/public/img/p-blue.png";
     return {
         tred,
         bred,
@@ -535,6 +538,7 @@ function initGame(d){
         units.veh.forEach(unit=>{
             drawUnit(ctx, unit); 
         });
+        drawProj(ctx, units);
 
         userInputs.dir = getDir(userInputs);
         console.log(userInputs);
