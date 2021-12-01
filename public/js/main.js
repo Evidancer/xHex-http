@@ -72,11 +72,19 @@ function drawUnit(ctx, unit){
     drawImage(ctx, ctx.imgs["t"+team], ...unit.bpos, unit.tang);
 }
 
+<<<<<<< HEAD
 function drawProj(ctx, unit){
     unit.proj.forEach(el=>{
         let team = (!el.team)?"blue":"red";
         drawImage(ctx, ctx.imgs["p"+team], ...el.pos, el.ang);
     });
+=======
+function drawProj(ctx, units){
+    units.proj.forEach(p=>{
+        drawImage(ctx, ctx.imgs["pred"], ...unit.pos, unit.ang);
+    });
+    
+>>>>>>> bb918a68cb881de273966ed33e04e1d9e2ca5d59
 }
 
 function drawImage(ctx, img, x, y, rad){
