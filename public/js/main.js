@@ -70,6 +70,9 @@ function drawUnit(ctx, unit){
     let team = (!unit.team)?"blue":"red";
     drawImage(ctx, ctx.imgs["b"+team], ...unit.bpos, unit.bang);
     drawImage(ctx, ctx.imgs["t"+team], ...unit.bpos, unit.tang);
+    if(unit.statuses.shield){
+        drawImage(ctx, ctx.imgs["s"+team], ...unit.bpos, 0);
+    }
 }
 
 function drawProj(ctx, unit){
@@ -100,13 +103,19 @@ function loadImages(){
     pred.src = "/public/img/p-red.png";
     let pblue = new Image();
     pblue.src = "/public/img/p-blue.png";
+    let sblue = new Image();
+    sblue.src = "/public/img/s-blue.png";
+    let sred = new Image();
+    sred.src = "/public/img/s-red.png";
     return {
         tred,
         bred,
         tblue,
         bblue,
         pred,
-        pblue
+        pblue,
+        sblue,
+        sred,
     };
 }
 
