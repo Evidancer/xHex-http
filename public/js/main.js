@@ -70,6 +70,7 @@ function drawUnit(ctx, unit){
     let team = (!unit.team)?"blue":"red";
     drawImage(ctx, ctx.imgs["b"+team], ...unit.bpos, unit.bang);
     drawImage(ctx, ctx.imgs["t"+team], ...unit.bpos, unit.tang);
+    
     if(unit.statuses.shield){
         drawImage(ctx, ctx.imgs["s"+team], ...unit.bpos, 0);
     }
