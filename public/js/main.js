@@ -83,6 +83,12 @@ function drawProj(ctx, unit){
     });
 }
 
+function drawBlocks(ctx, units){
+    units.blocks.forEach(el=>{
+        drawImage(ctx, ctx.imgs["block"], ...el.pos, el.ang);
+    });
+}
+
 function drawImage(ctx, img, x, y, rad){
     ctx.translate(x, y);
     ctx.rotate(rad);
@@ -108,6 +114,8 @@ function loadImages(){
     sblue.src = "/public/img/s-blue.png";
     let sred = new Image();
     sred.src = "/public/img/s-red.png";
+    let block = new Image();
+    block.src = "/public/img/block.png";
     return {
         tred,
         bred,
@@ -117,6 +125,7 @@ function loadImages(){
         pblue,
         sblue,
         sred,
+        block,
     };
 }
 
@@ -501,6 +510,8 @@ function initGame(d){
 
     Modal.last.hide();
     hideChat();
+    showScore();
+    changeScore([0,0], [0, 0]);
 
     let ws = new WebSocket(d.wss);
     ws.onopen = ()=>{
@@ -523,6 +534,9 @@ function initGame(d){
                 break;
             case "res-frame":
                 renderFrame(res.data.units);
+                changeScore(res.data.score, 
+                    [res.data.units.veh[0].hp,
+                    res.data.units.veh[1].hp]);
                 break;
             case "res-update-data":
                 updateData(res.data);
@@ -549,6 +563,8 @@ function initGame(d){
             drawUnit(ctx, unit); 
         });
         drawProj(ctx, units);
+        drawBlocks(ctx, units);
+        
 
         userInputs.dir = getDir(userInputs);
         console.log(userInputs);
@@ -630,6 +646,22 @@ function showChat(){
 
 function hideChat(){
     document.querySelector(".aside_chat").classList.remove("active");
+}
+
+function showScore(){
+    document.querySelector(".aside_score").classList.add("active");
+}
+
+function hideScore(){
+    document.querySelector(".aside_score").classList.remove("active");
+}
+
+function changeScore(scArr, hpArr){
+    document.getElementById("score0").innerText = scArr[0];
+    document.getElementById("score1").innerText = scArr[1];
+
+    document.getElementById("hp0").innerText = hpArr[0];
+    document.getElementById("hp1").innerText = hpArr[1];
 }
 
 function setUserData(){

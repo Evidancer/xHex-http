@@ -407,6 +407,26 @@ body {
     background: #007272;
 }
 
+.aside_score.active{
+    justify-content: center;
+    flex-direction: column;
+}
+
+.score-wrap {
+    font-size: 3em;
+    text-align: center;
+    font-weight: bold;
+    color:white;
+}
+
+.score-number-red {
+    color: rgb(255, 86, 86);
+}
+
+.score-number-blue {
+    color:rgb(94, 236, 255);
+}
+
 
 
 
