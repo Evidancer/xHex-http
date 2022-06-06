@@ -181,7 +181,21 @@ class IoController {
         let socket = this;
         User.find({nickname: global.sessions[socket.id].nickname}, (err, arr)=>{
             if(err) return;
-            if(isEmpty(arr)) return;
+            if(isEmpty(arr)){
+                socket.emit("res-update-info",{
+                    status: 1,
+                    stat_wins: 0,
+                    stat_looses: 0,
+                    matches: [],
+                    accuracies:{
+                        avrgAccuracy: 0,
+                        hits: 0,
+                        misses: 0,
+                        deflects: 0
+                    }
+                });
+                return;
+            };
             global.sessions[socket.id].stat_wins = arr[0].stat.wins;
             global.sessions[socket.id].stat_looses = arr[0].stat.looses;
             GameRecord.find().or([{"players.blue":global.sessions[socket.id].nickname},

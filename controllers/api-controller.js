@@ -64,6 +64,7 @@ class ApiController {
         }).save();
 
         User.find({nickname: req.red_player}, (err, arr)=>{
+            if(err||!arr.length) return;
             if(req.result == 1){
                 arr[0].stat.wins++; 
                 arr[0].save();
@@ -73,6 +74,7 @@ class ApiController {
             arr[0].save();
         });
         User.find({nickname: req.blue_player}, (err, arr)=>{
+            if(err||!arr.length) return;
             if(req.result == 0){
                 arr[0].stat.wins++; 
                 arr[0].save();
