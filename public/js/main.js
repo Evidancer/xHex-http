@@ -225,6 +225,7 @@ socket.on("sign-check", (res)=>{
     Load.hide();
     if(!res.status){
         modal('sign-in').show();
+        showError("sign-in", res.msg);
         return;
     }
     Modal.goTo("main");
@@ -426,6 +427,27 @@ function goToRoomList(){
     })
 }
 
+function goToProfile(){
+    socket.emit("req-update-info");
+    Load.show();
+    socket.on("res-update-info", (res)=>{
+        socket.off("res-update-info");
+        Load.hide();
+        console.log(res);
+        if(!res.status){
+            showModalError(res.msg);
+            return;
+        }
+        user.stat_wins = res.stat_wins;
+        user.stat_looses = res.stat_looses;
+        user.accuracies = res.accuracies;
+        user.matches = res.matches;
+        setUserData();
+        Modal.goTo('profile');
+    })
+}
+
+
 function joinRoomRequest(){
     let form = document.forms["join"];
     if(!form.elements["room-id"].value) {
@@ -550,6 +572,16 @@ function initGame(d){
 
     ws.onclose = ()=>{                      /// Нужно ловить ошибки
         modal("main").show();
+        setTimeout(()=>socket.emit("req-update-info"), 500);
+        hideScore();
+        socket.on("res-update-info", (res)=>{
+            if(!res.status) return;
+            user.stat_wins = res.stat_wins;
+            user.stat_looses = res.stat_looses;
+            user.accuracies = res.accuracies;
+            setUserData();
+        })
+        
         showChat();
     }
 
@@ -665,10 +697,30 @@ function changeScore(scArr, hpArr){
 }
 
 function setUserData(){
+    console.log("!!!!!!!!");
     console.log(user);
     document.querySelector("[name='user_nickname']").innerText = user.nickname;
     document.querySelector("[name='user_stat_wins']").innerText = user.stat_wins;
-    document.querySelector("[name='user_stat_losses']").innerText = user.stat_losses;
+    document.querySelector("[name='user_stat_losses']").innerText = user.stat_looses;
+    document.querySelector("[name='user_hits']").innerText = user.accuracies.hits;
+    document.querySelector("[name='user_misses']").innerText = user.accuracies.misses;
+    document.querySelector("[name='user_deflects']").innerText = user.accuracies.deflects;
+    document.querySelector("[name='user_avrg_accuracy']").innerText = Math.floor((user.accuracies.avrgAccuracy)*100)/100;
+    
+    
+    document.querySelector("[name='user_matches']").innerHTML = "";
+
+
+
+    for(let match in user.matches){
+        document.querySelector("[name='user_matches']").innerHTML += `
+            <li>${user.matches[match].players.blue} vs ${user.matches[match].players.red} |
+             Счет: ${user.matches[match].score.blue}:${user.matches[match].score.red}<br>
+             Попадания: ${user.matches[match].accuracies.blue.hits}:${user.matches[match].accuracies.red.hits}<br>
+             Промахи: ${user.matches[match].accuracies.blue.misses}:${user.matches[match].accuracies.red.misses}<br>
+             Отражения: ${user.matches[match].accuracies.blue.deflects}:${user.matches[match].accuracies.red.deflects}<br>
+            </li>`;
+    }
 }
 
 function showError(which, err) {

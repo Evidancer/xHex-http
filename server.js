@@ -11,6 +11,7 @@ const http = require('http');
 const IoController = require('./controllers/io-controller.js');
 const httpRouter = require('./routes/http-router.js');
 const apiRouter = require('./routes/api-router.js');
+const db = require(__dirname + "/db.js");
 
 const port =  process.env.PORT || 80;
 const app = express();

@@ -93,8 +93,8 @@
         <div class="modal-title">МЕНЮ</div>
         <button class="modal-main_btn" onclick="goToRoomList()">Присоединиться</button>
         <button class="modal-main_btn" onclick="modal('main').goTo('create')">Создать</button>
-        <button class="modal-main_btn" onclick="modal('main').goTo('profile')">Профиль</button>
-        <button class="modal-main_btn" onclick="modal('main').goTo('how')">Как играть</button>
+        <button class="modal-main_btn" onclick="goToProfile()">Профиль</button>
+        <!-- <button class="modal-main_btn" onclick="modal('main').goTo('how')">Как играть</button> -->
     </div>
 
     <div class="modal modal-join">
@@ -175,7 +175,17 @@
         <div class="modal-nickname">Ник: <span name="user_nickname"></span></div>
         <div class="modal-desc">
             Побед: <span name="user_stat_wins"></span><br>
-            Поражений: <span name="user_stat_losses"></span>
+            Поражений: <span name="user_stat_losses"></span><br>
+            Всего попаданий: <span name="user_hits"></span><br>
+            Всего промахов: <span name="user_misses"></span><br>
+            Всего отражений: <span name="user_deflects"></span><br>
+            Средняя точность: <span name="user_avrg_accuracy"></span><br>
+            Матчи:
+            <div class="modal-small-scroll" >
+                <ol name="user_matches">
+
+                </ol>
+            </div>
         </div>
         <div class="modal-error error-profile"></div>
         <button onclick="signOutRequest()" class="modal-main_btn">Выйти из уч. записи</button>
