@@ -68,8 +68,9 @@ ctx.imgs = loadImages();
 
 function drawUnit(ctx, unit){
     let team = (!unit.team)?"blue":"red";
+    let charge = (unit.statuses.antiarmor)? "a": "";
     drawImage(ctx, ctx.imgs["b"+team], ...unit.bpos, unit.bang);
-    drawImage(ctx, ctx.imgs["t"+team], ...unit.bpos, unit.tang);
+    drawImage(ctx, ctx.imgs[charge+"t"+team], ...unit.bpos, unit.tang);
     
     if(unit.statuses.shield){
         drawImage(ctx, ctx.imgs["s"+team], ...unit.bpos, 0);
@@ -79,7 +80,8 @@ function drawUnit(ctx, unit){
 function drawProj(ctx, unit){
     unit.proj.forEach(el=>{
         let team = (!el.team)?"blue":"red";
-        drawImage(ctx, ctx.imgs["p"+team], ...el.pos, el.ang);
+        let type = el.antiarmor? "a": "";
+        drawImage(ctx, ctx.imgs[type+"p"+team], ...el.pos, el.ang);
     });
 }
 
@@ -88,6 +90,16 @@ function drawBlocks(ctx, units){
         drawImage(ctx, ctx.imgs["block"], ...el.pos, el.ang);
     });
 }
+
+function drawItems(ctx, units){
+    units.items.forEach(el=>{
+        let type = el.type? "antiarmor": "heal";
+        if(el.status){
+            drawImage(ctx, ctx.imgs[type], ...el.pos, el.ang);
+        }
+    });
+}
+
 
 function drawImage(ctx, img, x, y, rad){
     ctx.translate(x, y);
@@ -116,6 +128,18 @@ function loadImages(){
     sred.src = "/public/img/s-red.png";
     let block = new Image();
     block.src = "/public/img/block.png";
+    let apred = new Image();
+    apred.src = "/public/img/ap-red.png";
+    let apblue = new Image();
+    apblue.src = "/public/img/ap-blue.png";
+    let heal = new Image();
+    heal.src = "/public/img/heal.png";
+    let antiarmor = new Image();
+    antiarmor.src = "/public/img/anti-armor.png";
+    let atred = new Image();
+    atred.src = "/public/img/at-red.png";
+    let atblue = new Image();
+    atblue.src = "/public/img/at-blue.png";
     return {
         tred,
         bred,
@@ -126,6 +150,12 @@ function loadImages(){
         sblue,
         sred,
         block,
+        apred,
+        apblue,
+        heal,
+        antiarmor,
+        atred,
+        atblue,
     };
 }
 
@@ -141,6 +171,10 @@ let userInputs = {
     a:0,
     s:0,
     d:0,
+    "ц":0,
+    "ф":0,
+    "ы":0,
+    "в":0,
     dir:[0, 0],
     mb0:0,
     mc0:0,
@@ -200,7 +234,16 @@ function getAngleDeg(x, y) {
 }
 
 function getDir(keys){
-    return [0+keys.w-keys.s, 0+keys.d-keys.a];
+    let w = keys.w;
+    w += keys["ц"];
+    let s = keys.s;
+    s += keys["ы"];
+    let a = keys.a;
+    a += keys["ф"];
+    let d = keys.d;
+    d += keys["в"];
+    
+    return [0+w-s, 0+d-a];
 }
 
 ///////////////////////////////////////////
@@ -596,7 +639,7 @@ function initGame(d){
         });
         drawProj(ctx, units);
         drawBlocks(ctx, units);
-        
+        drawItems(ctx, units);
 
         userInputs.dir = getDir(userInputs);
         console.log(userInputs);
